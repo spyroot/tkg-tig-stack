@@ -1,17 +1,21 @@
-### Setup Telegraf, InfluxDB and Grafana on Kubernetes
-
-Please find the steps to setup TIG on Kubernetes
+### Setup TIG stack (Telegraf, InfluxDB and Grafana) on TKG Kubernetes
 
 ### InfluxDB
 
 Start by deploying InfluxDB
 
+Create PVC, Service and Deployment. 
+
+Note Services uses LoadBalancer
+
 ```bash
-# kubectl create -f influxdb-service.yml
-# kubectl create -f influxdb-deployment.yml
+# kubectl apply -f inflexdb-pvc.yml
+# kubectl apply -f influxdb-service.yml
+# kubectl apply -f influxdb-deployment.yml
 ```
 
-Wait for the InfluxDB deployment to finish, then create a database for our metrics.
+Cross check that you can connect InfluxDB.
+
 
 ```bash
 # POD_NAME=$(kubectl get pod -l app=influxdb -o "jsonpath={.items[0].metadata.name}")
