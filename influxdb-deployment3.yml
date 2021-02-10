@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: influxdb
+  labels:
+    app: influxdb
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app: influxdb
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: influxdb
+    spec:
+      containers:
+      - envFrom:
+        - secretRef:
+            name: influxdb-secrets
+        image: docker.io/influxdb:1.8.4
+        name: influxdb
+        ports:
+        - containerPort: 8086
+          name: influxdb
+        volumeMounts:
+        - name: influxdb-data
+          mountPath: /var/lib/influxdb
+      volumes:
+      - name: influxdb-data
+        persistentVolumeClaim:
+          claimName: inflex-pvc
+      securityContext:
+        runAsUser: 0 
